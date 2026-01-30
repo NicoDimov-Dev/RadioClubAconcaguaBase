@@ -72,8 +72,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 md:h-20">
                 <a href="#" onclick="showPage('home')" class="flex items-center gap-3">
-                    <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center logo-glow overflow-hidden p-1">
-                        <!-- Direct link used for the logo -->
+                    <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center logo-glow overflow-hidden">
                         <img src="https://iili.io/fL0tv5v.png" alt="LU4MH Logo" class="w-full h-full object-contain" />
                     </div>
                     <div class="flex flex-col">
@@ -154,11 +153,9 @@
                                 Fomentando la radioafición desde el corazón de Las Heras. Un punto de encuentro para entusiastas de las comunicaciones y la tecnología.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <button class="px-10 py-5 bg-primary hover:bg-red-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 transition-all hover:scale-105">
+                                <!-- Smaller "Unirse al Club" button and removed "Ver Frecuencias" -->
+                                <button class="px-8 py-3.5 bg-primary hover:bg-red-600 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 transition-all hover:scale-105">
                                     Unirse al Club
-                                </button>
-                                <button class="px-10 py-5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2">
-                                    Ver Frecuencias <span class="material-icons-round">sensors</span>
                                 </button>
                             </div>
                             
@@ -176,12 +173,12 @@
                         
                         <!-- Visual Logo Section -->
                         <div class="flex justify-center items-center relative">
-                            <div class="relative w-full max-w-[500px] aspect-square">
+                            <div class="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
                                 <!-- Multi-layered glow -->
                                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-[80px]"></div>
-                                <!-- Updated Logo Image -->
-                                <div class="relative w-full h-full rounded-full flex items-center justify-center p-4 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden border-[1px] border-slate-200 dark:border-slate-800">
-                                    <img src="https://i.freeimage.host/fL0tv5v.png" alt="Radio Club Aconcagua Logo" class="w-full h-full object-contain scale-90" />
+                                <!-- Removed styled container, kept only the logo centered over the glow -->
+                                <div class="relative w-full h-full flex items-center justify-center p-4">
+                                    <img src="https://iili.io/fL0tv5v.png" alt="Radio Club Aconcagua Logo" class="w-full h-full object-contain logo-glow" />
                                 </div>
                             </div>
                         </div>
@@ -205,16 +202,40 @@
 
         <!-- RESOURCES PAGE -->
         <section id="page-resources" class="page-section pt-32 pb-20">
-            <header class="bg-slate-900 text-white py-24 text-center relative overflow-hidden mb-16">
-                <div class="absolute inset-0 bg-accent opacity-10 mix-blend-overlay"></div>
-                <div class="max-w-4xl mx-auto px-4 relative z-10">
-                    <h1 class="text-5xl font-display font-bold mb-4">Recursos Técnicos</h1>
-                    <p class="text-xl text-slate-400 font-medium leading-relaxed">Documentación técnica, guías de estudio y software especializado.</p>
-                </div>
-            </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-16" id="resources-grid">
-                    <!-- Populated via script -->
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20">
+                    <!-- Left Column: Guías y Manuales -->
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
+                            <span class="material-icons-round text-accent text-3xl">menu_book</span>
+                            <h2 class="text-2xl font-display font-bold">Guías y Manuales</h2>
+                        </div>
+                        <div class="space-y-4" id="manuals-list">
+                            <!-- Populated via script -->
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Software -->
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
+                            <span class="material-icons-round text-accent text-3xl">terminal</span>
+                            <h2 class="text-2xl font-display font-bold">Software para Radioaficionados</h2>
+                        </div>
+                        <div class="space-y-6" id="software-list">
+                            <!-- Populated via script -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Useful Links Section -->
+                <div class="mt-32">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-display font-black">Enlaces de Interés</h2>
+                        <div class="w-16 h-1 bg-accent mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="useful-links">
+                        <!-- Populated via script -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -240,9 +261,9 @@
             <div class="grid md:grid-cols-4 gap-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden p-1">
-                            <!-- Updated Footer Logo -->
-                            <img src="https://i.freeimage.host/fL0tv5v.png" alt="Logo" class="w-full h-full object-contain" />
+                        <div class="w-12 h-12 flex items-center justify-center overflow-hidden">
+                            <!-- Removed white background from footer logo as well for consistency -->
+                            <img src="https://iili.io/fL0tv5v.png" alt="Logo" class="w-full h-full object-contain" />
                         </div>
                         <div>
                             <h4 class="text-2xl font-display font-bold leading-tight">Radio Club Aconcagua</h4>
@@ -295,15 +316,15 @@
             {
                 title: "Expedición Cerro Aconcagua",
                 date: "Oct 24, 2023",
-                category: "Field Day",
+                category: "Salida al campo",
                 icon: "event",
                 desc: "Operaciones exitosas en VHF/UHF a 3.000m de altura. Logramos comunicados con operadores de todo el Cono Sur.",
-                img: "https://images.unsplash.com/photo-1551709129-270407aca4dd?auto=format&fit=crop&q=80&w=600"
+                img: "https://www.buytwowayradios.com/wp/wp-content/uploads/2/sites/2/images/landscape-nature-mountain-snow-black-and-white-hiking-546355.jpg"
             },
             {
                 title: "Taller Técnico Mensual",
                 date: "Nov 02, 2023",
-                category: "Meeting",
+                category: "Encuentro",
                 icon: "groups",
                 desc: "Sesión práctica sobre construcción de antenas y ajuste de ROE para nuevos socios y aspirantes.",
                 img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=600"
@@ -311,7 +332,7 @@
             {
                 title: "Simulacro de Emergencia",
                 date: "Nov 15, 2023",
-                category: "Drill",
+                category: "Simulacro",
                 icon: "warning",
                 desc: "Simulación de caída de red eléctrica y establecimiento de enlaces críticos en toda la provincia de Mendoza.",
                 img: "https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&q=80&w=600"
@@ -338,6 +359,25 @@
                 time: '08:00 HS', location: 'Cerro Arco'
             }
         ];
+
+        const resourcesData = {
+            manuals: [
+                { title: "Plan de Repetidoras Aconcagua (2024)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
+                { title: "Guía de Estudio para Aspirantes", desc: "Material completo para los exámenes de categoría Novice y General en Argentina.", icon: "description" },
+                { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" },
+                { title: "Manual de Operación en Emergencias", desc: "Protocolos y frecuencias críticas para situaciones de catástrofe.", icon: "emergency" }
+            ],
+            software: [
+                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales y frecuencias de emergencia.", linkText: "Descargar Archivos .IMG", icon: "settings_input_component" },
+                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8, JS8Call y Winlink en sistemas Windows y Linux para estaciones de Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
+            ],
+            links: [
+                { name: "ENACOM Argentina", url: "https://www.enacom.gob.ar/" },
+                { name: "Radio Club Argentino", url: "https://www.lu4aa.org/" },
+                { name: "IARU Region 2", url: "https://www.iaru-r2.org/" },
+                { name: "Solar Ham Data", url: "https://www.solarham.net/" }
+            ]
+        };
 
         // Rendering Functions
         function renderActivities() {
@@ -386,6 +426,48 @@
             `).join('');
         }
 
+        function renderResources() {
+            // Render Manuals
+            const manualsList = document.getElementById('manuals-list');
+            manualsList.innerHTML = resourcesData.manuals.map(item => `
+                <div class="group bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 flex items-center gap-5 hover:bg-slate-800/80 transition-all cursor-pointer">
+                    <div class="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all">
+                        <span class="material-icons-round">${item.icon}</span>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-slate-100 text-lg leading-tight group-hover:text-accent transition-colors">${item.title}</h4>
+                        <p class="text-sm text-slate-500 mt-1">${item.desc}</p>
+                    </div>
+                    <span class="material-icons-round text-slate-500 group-hover:text-accent">file_download</span>
+                </div>
+            `).join('');
+
+            // Render Software
+            const softwareList = document.getElementById('software-list');
+            softwareList.innerHTML = resourcesData.software.map(item => `
+                <div class="bg-slate-800/40 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent">
+                            <span class="material-icons-round">${item.icon}</span>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold text-slate-100">${item.title}</h3>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed mb-8">${item.desc}</p>
+                    <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">
+                        ${item.linkText} <span class="material-icons-round text-sm">${item.linkText.includes('VER') ? 'launch' : 'file_download'}</span>
+                    </a>
+                </div>
+            `).join('');
+
+            // Render Links
+            const usefulLinks = document.getElementById('useful-links');
+            usefulLinks.innerHTML = resourcesData.links.map(link => `
+                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">
+                    ${link.name}
+                </a>
+            `).join('');
+        }
+
         // Logic Functions
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
@@ -422,6 +504,7 @@
         window.onload = () => {
             renderActivities();
             renderCalendar();
+            renderResources();
         };
     </script>
 </body>
