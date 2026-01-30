@@ -102,7 +102,7 @@
                     <div class="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
                     <div class="flex items-center gap-4 px-2">
                         <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Facebook"><span class="material-icons-round text-xl">facebook</span></a>
-                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Instagram"><span class="material-icons-round text-xl">camera_alt</span></a>
+                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Insram"><span class="material-icons-round text-xl">camera_alt</span></a>
                     </div>
                     <div class="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
                     <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors ml-2" aria-label="Cambiar tema">
@@ -383,18 +383,18 @@
                             d = parts[0];
                             m = months[parseInt(parts[1]) - 1] || '';
                         }
-                        return { title: item.Titulo || '', desc: item.Descripcion || '', day: d, month: m, time: item.Horario || '', location: item.Ubicacion || '', tag: item.Categoria || 'REUNIÓN', tagColor: getTagColor(item.Categoria) };
+                        return { title: item.Titulo || '', desc: item.Descripcion || '', day: d, month: m, time: item.Horario || '', location: item.Ubicacion || '', : item.Categoria || 'REUNIÓN', Color: getColor(item.Categoria) };
                     });
                 }
             } catch (error) { console.error("Error loading data:", error); }
         }
 
-        function getTagColor(tag) {
-            const t = (tag || '').toUpperCase();
-            if (t.includes('CURSO')) return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-            if (t.includes('CONCURSO')) return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-            if (t.includes('SALIDA') || t.includes('EXPEDICIÓN')) return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-            return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        function getColor() {
+            const t = ( || '').toUpperCase();
+            if (t.includes('CURSO')) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+            if (t.includes('CONCURSO')) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+            if (t.includes('SALIDA') || t.includes('EXPEDICIÓN')) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+            return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
         }
 
         function renderActivities() {
@@ -403,13 +403,13 @@
             container.innerHTML = activitiesData.map((act, index) => {
                 const cleanDesc = act.desc.replace(/\r?\n|\r/g, " ");
                 const shortDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
-                const tagColor = getTagColor(act.category);
+                const Color = getColor(act.category);
                 return `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700 flex flex-col">
                     <div class="h-56 overflow-hidden relative">
                         <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                        <!-- Unified Tag Morphology -->
-                        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
+                        <!-- Unified  Morphology -->
+                        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${Color}">${act.category}</div>
                     </div>
                     <div class="p-8 flex-grow flex flex-col">
                         <div class="flex items-center gap-2 text-primary mb-3">
@@ -430,13 +430,13 @@
             const act = activitiesData[index];
             const modal = document.getElementById('activity-modal');
             const content = document.getElementById('modal-content');
-            const tagColor = getTagColor(act.category);
+            const Color = getColor(act.category);
 
             content.innerHTML = `
                 <div class="h-64 sm:h-80 overflow-hidden relative">
                     <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                    <!-- Unified Tag Morphology in Modal -->
-                    <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
+                    <!-- Unified  Morphology in Modal -->
+                    <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${Color}">${act.category}</div>
                 </div>
                 <div class="p-8 sm:p-12">
                     <div class="flex items-center gap-2 text-primary mb-4">
@@ -540,4 +540,5 @@
     </script>
 </body>
 </html>
+
 
