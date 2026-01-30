@@ -181,7 +181,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-3 gap-8" id="activities-container">
                     <!-- Loading Skeleton -->
-                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96 text-center flex items-center justify-center">Cargando...</div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
                 </div>
@@ -271,9 +271,8 @@
     </footer>
 
     <script>
-        // --- GOOGLE SHEETS CONFIGURATION ---
-        // 1. Publish your sheet to the web as CSV.
-        // 2. Put your Sheet ID here.
+        // --- CONFIGURACIÓN DE GOOGLE SHEETS ---
+        // Asegúrate de usar el ID interno (el que sale en la barra de direcciones de edición)
         const SHEET_ID = '1vdm3PfvJBL8e8OJohTWAKt74FjR0Igi4RNMY-OUPV30'; 
         
         const SHEET_CONFIG = {
@@ -281,7 +280,7 @@
             calendar: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Calendario`
         };
 
-        // Fallback data (Used if SHEET_ID is not set or fetch fails)
+        // Datos por defecto (Se usan si el fetch falla o no hay ID)
         let activitiesData = [
             {
                 title: "Expedición Cerro Aconcagua",
@@ -304,24 +303,31 @@
 
         const resourcesData = {
             manuals: [
-                { title: "Plan de Repetidoras (2024)", desc: "Listado de repetidoras region Cuyo.", icon: "picture_as_pdf" },
-                { title: "Guía de Estudio", desc: "Material para exámenes Novice y General.", icon: "description" }
+                { title: "Plan de Repetidoras Aconcagua (2024)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
+                { title: "Guía de Estudio para Aspirantes", desc: "Material completo para los exámenes de categoría Novice y General en Argentina.", icon: "description" },
+                { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" },
+                { title: "Manual de Operación en Emergencias", desc: "Protocolos y frecuencias críticas para situaciones de catástrofe.", icon: "emergency" }
             ],
             software: [
-                { title: "Gestión CHIRP", desc: "Archivos .IMG precargados.", linkText: "Descargar .IMG", icon: "settings_input_component" }
+                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales y frecuencias de emergencia.", linkText: "Descargar Archivos .IMG", icon: "settings_input_component" },
+                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8, JS8Call y Winlink en sistemas Windows y Linux para estaciones de Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
             ],
             links: [
-                { name: "ENACOM", url: "https://www.enacom.gob.ar/" },
-                { name: "LU4AA", url: "https://www.lu4aa.org/" }
+                { name: "ENACOM Argentina", url: "https://www.enacom.gob.ar/" },
+                { name: "Radio Club Argentino", url: "https://www.lu4aa.org/" },
+                { name: "IARU Region 2", url: "https://www.iaru-r2.org/" },
+                { name: "Solar Ham Data", url: "https://www.solarham.net/" }
             ]
         };
 
-        // Simple CSV Parser
+        // Parser de CSV simple
         function parseCSV(csvText) {
             const rows = csvText.split(/\r?\n/);
+            if (rows.length === 0) return [];
+            
             const headers = rows[0].split(',').map(h => h.replace(/"/g, '').trim());
             return rows.slice(1).filter(row => row.trim() !== '').map(row => {
-                const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // Split by comma but respect quotes
+                const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const obj = {};
                 headers.forEach((header, i) => {
                     obj[header] = values[i] ? values[i].replace(/"/g, '').trim() : '';
@@ -331,7 +337,7 @@
         }
 
         async function loadDataFromSheets() {
-            if (SHEET_ID === 'YOUR_SHEET_ID_HERE') return;
+            if (SHEET_ID.includes('REEMPLAZA')) return;
 
             try {
                 const [actRes, calRes] = await Promise.all([
@@ -341,23 +347,52 @@
 
                 if (actRes.ok) {
                     const actText = await actRes.text();
-                    activitiesData = parseCSV(actText);
+                    const rawActivities = parseCSV(actText);
+                    // Mapeo de headers específicos de Actividades
+                    activitiesData = rawActivities.map(item => ({
+                        title: item.Titulo || item.title || '',
+                        desc: item.Descripcion || item.desc || '',
+                        category: item.Categoria || item.category || 'Evento',
+                        date: item.Fecha || item.date || '',
+                        img: item.Imagen || item.img || '',
+                        icon: 'event'
+                    }));
                 }
                 if (calRes.ok) {
                     const calText = await calRes.text();
-                    calendarData = parseCSV(calText);
+                    const rawCalendar = parseCSV(calText);
+                    // Mapeo de headers específicos de Calendario
+                    calendarData = rawCalendar.map(item => ({
+                        title: item.Titulo || item.title || '',
+                        desc: item.Descripcion || item.desc || '',
+                        day: item.Dia || item.day || '',
+                        month: item.Mes || item.month || '',
+                        time: item.Horario || item.time || '',
+                        location: item.Ubicacion || item.location || '',
+                        tag: item.Categoria || item.tag || 'REUNIÓN',
+                        tagColor: getTagColor(item.Categoria || item.tag)
+                    }));
                 }
             } catch (error) {
-                console.error("Error loading from Google Sheets:", error);
+                console.error("Error cargando datos:", error);
             }
+        }
+
+        function getTagColor(tag) {
+            const t = (tag || '').toUpperCase();
+            if (t.includes('CURSO')) return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+            if (t.includes('CONCURSO')) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+            if (t.includes('SALIDA') || t.includes('EXPEDICIÓN')) return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400';
+            return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
         }
 
         function renderActivities() {
             const container = document.getElementById('activities-container');
+            if (activitiesData.length === 0) return;
             container.innerHTML = activitiesData.map(act => `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700">
                     <div class="h-56 overflow-hidden relative">
-                        <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
                         <div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">${act.category}</div>
                     </div>
                     <div class="p-8">
@@ -375,6 +410,7 @@
 
         function renderCalendar() {
             const container = document.getElementById('calendar-container');
+            if (calendarData.length === 0) return;
             container.innerHTML = calendarData.map(event => `
                 <div class="group bg-white dark:bg-slate-800 rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col h-full overflow-hidden">
                     <div class="p-8 pb-0 flex items-start justify-between">
@@ -382,7 +418,7 @@
                             <span class="text-3xl font-black leading-none">${event.day}</span>
                             <span class="text-xs font-bold uppercase">${event.month}</span>
                         </div>
-                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor || 'bg-slate-100 text-slate-700'}">${event.tag}</span>
+                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
                     </div>
                     <div class="p-8 flex-grow">
                         <h3 class="text-2xl font-bold font-display mb-3 group-hover:text-primary transition-colors leading-tight">${event.title}</h3>
@@ -391,6 +427,10 @@
                             <div class="flex items-center gap-3 text-slate-400">
                                 <span class="material-icons-round text-sm text-primary">schedule</span>
                                 <span class="text-xs font-bold">${event.time}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-400">
+                                <span class="material-icons-round text-sm text-primary">location_on</span>
+                                <span class="text-xs font-bold">${event.location}</span>
                             </div>
                         </div>
                     </div>
@@ -450,7 +490,7 @@
         }
 
         window.onload = async () => {
-            renderResources(); // Resources are static for now
+            renderResources();
             await loadDataFromSheets();
             renderActivities();
             renderCalendar();
