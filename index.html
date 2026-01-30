@@ -180,7 +180,6 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-3 gap-8" id="activities-container">
-                    <!-- Loading Skeleton -->
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96 text-center flex items-center justify-center">Cargando...</div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
@@ -225,7 +224,6 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="calendar-container">
-                    <!-- Loading Skeleton -->
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
                 </div>
@@ -276,9 +274,7 @@
             <button onclick="closeActivityModal()" class="fixed sm:absolute top-6 right-6 p-2 rounded-full bg-white dark:bg-slate-800 sm:bg-transparent shadow-lg sm:shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors z-[70]">
                 <span class="material-icons-round">close</span>
             </button>
-            <div id="modal-content">
-                <!-- Dynamic content -->
-            </div>
+            <div id="modal-content"></div>
         </div>
     </div>
 
@@ -313,16 +309,53 @@
             ]
         };
 
-        // Simple CSV Parser
+        /**
+         * Parser de CSV Robusto
+         * Maneja correctamente saltos de línea y comas dentro de campos entrecomillados.
+         */
         function parseCSV(csvText) {
-            const rows = csvText.split(/\r?\n/);
-            if (rows.length === 0) return [];
-            const headers = rows[0].split(',').map(h => h.replace(/"/g, '').trim());
-            return rows.slice(1).filter(row => row.trim() !== '').map(row => {
-                const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            const result = [];
+            let currentRow = [];
+            let currentField = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+
+                if (char === '"') {
+                    // Manejar comillas dobles escapadas ("")
+                    if (inQuotes && nextChar === '"') {
+                        currentField += '"';
+                        i++; 
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    currentRow.push(currentField);
+                    currentField = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') i++; // CRLF
+                    currentRow.push(currentField);
+                    result.push(currentRow);
+                    currentRow = [];
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            if (currentRow.length > 0 || currentField !== '') {
+                currentRow.push(currentField);
+                result.push(currentRow);
+            }
+
+            if (result.length === 0) return [];
+            
+            const headers = result[0].map(h => h.trim());
+            return result.slice(1).map(row => {
                 const obj = {};
                 headers.forEach((header, i) => {
-                    obj[header] = values[i] ? values[i].replace(/"/g, '').trim() : '';
+                    obj[header] = row[i] ? row[i].trim() : '';
                 });
                 return obj;
             });
@@ -342,11 +375,11 @@
                     activitiesData = parseCSV(actText)
                         .filter(item => (item.Estado || '').trim() === 'Publicado')
                         .map(item => ({
-                            title: item.Titulo || item.title || '',
-                            desc: item.Descripcion || item.desc || '',
-                            category: item.Categoria || item.category || 'Evento',
-                            date: item.Fecha || item.date || '',
-                            img: item.Imagen || item.img || '',
+                            title: item.Titulo || '',
+                            desc: item.Descripcion || '',
+                            category: item.Categoria || 'Evento',
+                            date: item.Fecha || '',
+                            img: item.Imagen || '',
                             icon: 'event'
                         }));
                 }
@@ -364,13 +397,13 @@
                                 m = months[parseInt(parts[1]) - 1] || '';
                             }
                             return {
-                                title: item.Titulo || item.title || '',
-                                desc: item.Descripcion || item.desc || '',
+                                title: item.Titulo || '',
+                                desc: item.Descripcion || '',
                                 day: d, month: m,
-                                time: item.Horario || item.time || '',
-                                location: item.Ubicacion || item.location || '',
-                                tag: item.Categoria || item.tag || 'REUNIÓN',
-                                tagColor: getTagColor(item.Categoria || item.tag)
+                                time: item.Horario || '',
+                                location: item.Ubicacion || '',
+                                tag: item.Categoria || 'REUNIÓN',
+                                tagColor: getTagColor(item.Categoria)
                             };
                         });
                 }
@@ -392,7 +425,9 @@
                 return;
             }
             container.innerHTML = activitiesData.map((act, index) => {
-                const shortDesc = act.desc.length > 120 ? act.desc.substring(0, 120) + '...' : act.desc;
+                // Remover posibles saltos de línea para el resumen de la tarjeta
+                const cleanDesc = act.desc.replace(/\r?\n|\r/g, " ");
+                const shortDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
                 return `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700 flex flex-col">
                     <div class="h-56 overflow-hidden relative">
@@ -444,7 +479,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal on outside click
         document.getElementById('activity-modal').addEventListener('click', (e) => {
             if (e.target.id === 'activity-modal') closeActivityModal();
         });
@@ -466,7 +500,7 @@
                     </div>
                     <div class="p-8 flex-grow">
                         <h3 class="text-2xl font-bold font-display mb-3 group-hover:text-primary transition-colors leading-tight">${event.title}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">${event.desc}</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 whitespace-pre-line">${event.desc}</p>
                         <div class="space-y-3 pt-4 border-t border-slate-50 dark:border-slate-700/50">
                             <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold">${event.time}</span></div>
                             <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold">${event.location}</span></div>
