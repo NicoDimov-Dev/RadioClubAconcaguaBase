@@ -270,9 +270,20 @@
         </div>
     </footer>
 
+    <!-- Activity Modal -->
+    <div id="activity-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <button onclick="closeActivityModal()" class="fixed sm:absolute top-6 right-6 p-2 rounded-full bg-white dark:bg-slate-800 sm:bg-transparent shadow-lg sm:shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors z-[70]">
+                <span class="material-icons-round">close</span>
+            </button>
+            <div id="modal-content">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- CONFIGURACIÓN DE GOOGLE SHEETS ---
-        // Asegúrate de usar el ID interno (el que sale en la barra de direcciones de edición)
         const SHEET_ID = '1vdm3PfvJBL8e8OJohTWAKt74FjR0Igi4RNMY-OUPV30'; 
         
         const SHEET_CONFIG = {
@@ -280,26 +291,8 @@
             calendar: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Calendario`
         };
 
-        // Datos por defecto (Se usan si el fetch falla o no hay ID)
-        let activitiesData = [
-            {
-                title: "Expedición Cerro Aconcagua",
-                date: "Oct 24, 2023",
-                category: "Salida al campo",
-                icon: "event",
-                desc: "Operaciones exitosas en VHF/UHF a 3.000m de altura.",
-                img: "https://www.buytwowayradios.com/wp/wp-content/uploads/2/sites/2/images/landscape-nature-mountain-snow-black-and-white-hiking-546355.jpg"
-            }
-        ];
-
-        let calendarData = [
-            {
-                day: '04', month: 'MAY', title: 'Inicio Curso Aspirante', tag: 'CURSO',
-                tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-                desc: 'Capacitación para obtener la señal distintiva inicial.',
-                time: '15:00 HS', location: 'Sede Social'
-            }
-        ];
+        let activitiesData = [];
+        let calendarData = [];
 
         const resourcesData = {
             manuals: [
@@ -320,11 +313,10 @@
             ]
         };
 
-        // Parser de CSV simple
+        // Simple CSV Parser
         function parseCSV(csvText) {
             const rows = csvText.split(/\r?\n/);
             if (rows.length === 0) return [];
-            
             const headers = rows[0].split(',').map(h => h.replace(/"/g, '').trim());
             return rows.slice(1).filter(row => row.trim() !== '').map(row => {
                 const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -347,9 +339,7 @@
 
                 if (actRes.ok) {
                     const actText = await actRes.text();
-                    const rawActivities = parseCSV(actText);
-                    // Filtrar por Estado "Publicado" y mapear
-                    activitiesData = rawActivities
+                    activitiesData = parseCSV(actText)
                         .filter(item => (item.Estado || '').trim() === 'Publicado')
                         .map(item => ({
                             title: item.Titulo || item.title || '',
@@ -362,29 +352,21 @@
                 }
                 if (calRes.ok) {
                     const calText = await calRes.text();
-                    const rawCalendar = parseCSV(calText);
-                    
                     const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-
-                    // Filtrar por Estado "Publicado" y mapear
-                    calendarData = rawCalendar
+                    calendarData = parseCSV(calText)
                         .filter(item => (item.Estado || '').trim() === 'Publicado')
                         .map(item => {
-                            // Procesar la columna "Fecha" (1/2/2025)
                             const dateStr = item.Fecha || '';
                             let d = '', m = '';
                             if (dateStr.includes('/')) {
                                 const parts = dateStr.split('/');
                                 d = parts[0];
-                                const monthNum = parseInt(parts[1]);
-                                m = months[monthNum - 1] || '';
+                                m = months[parseInt(parts[1]) - 1] || '';
                             }
-
                             return {
                                 title: item.Titulo || item.title || '',
                                 desc: item.Descripcion || item.desc || '',
-                                day: d,
-                                month: m,
+                                day: d, month: m,
                                 time: item.Horario || item.time || '',
                                 location: item.Ubicacion || item.location || '',
                                 tag: item.Categoria || item.tag || 'REUNIÓN',
@@ -392,9 +374,7 @@
                             };
                         });
                 }
-            } catch (error) {
-                console.error("Error cargando datos:", error);
-            }
+            } catch (error) { console.error("Error loading data:", error); }
         }
 
         function getTagColor(tag) {
@@ -408,32 +388,71 @@
         function renderActivities() {
             const container = document.getElementById('activities-container');
             if (activitiesData.length === 0) {
-                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas por el momento.</p>';
+                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas.</p>';
                 return;
             }
-            container.innerHTML = activitiesData.map(act => `
-                <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700">
+            container.innerHTML = activitiesData.map((act, index) => {
+                const shortDesc = act.desc.length > 120 ? act.desc.substring(0, 120) + '...' : act.desc;
+                return `
+                <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700 flex flex-col">
                     <div class="h-56 overflow-hidden relative">
                         <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
                         <div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">${act.category}</div>
                     </div>
-                    <div class="p-8">
+                    <div class="p-8 flex-grow flex flex-col">
                         <div class="flex items-center gap-2 text-primary mb-3">
                             <span class="material-icons-round text-sm">${act.icon}</span>
                             <span class="text-xs font-black uppercase tracking-widest">${act.date}</span>
                         </div>
                         <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">${act.title}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">${act.desc}</p>
-                        <button class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all">Ver Detalles</button>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">${shortDesc}</p>
+                        <button onclick="openActivityModal(${index})" class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all w-fit">
+                            Ver Detalles
+                        </button>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
+
+        function openActivityModal(index) {
+            const act = activitiesData[index];
+            const modal = document.getElementById('activity-modal');
+            const content = document.getElementById('modal-content');
+            
+            content.innerHTML = `
+                <div class="h-64 sm:h-80 overflow-hidden relative">
+                    <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
+                    <div class="absolute top-6 left-6 bg-primary text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">${act.category}</div>
+                </div>
+                <div class="p-8 sm:p-12">
+                    <div class="flex items-center gap-2 text-primary mb-4">
+                        <span class="material-icons-round text-sm">${act.icon}</span>
+                        <span class="text-xs font-black uppercase tracking-widest">${act.date}</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-display font-black mb-6 leading-tight text-slate-900 dark:text-white">${act.title}</h2>
+                    <div class="prose prose-slate dark:prose-invert max-w-none">
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line">${act.desc}</p>
+                    </div>
+                </div>`;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeActivityModal() {
+            document.getElementById('activity-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('activity-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'activity-modal') closeActivityModal();
+        });
 
         function renderCalendar() {
             const container = document.getElementById('calendar-container');
             if (calendarData.length === 0) {
-                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos publicados.</p>';
+                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos.</p>';
                 return;
             }
             container.innerHTML = calendarData.map(event => `
@@ -449,57 +468,36 @@
                         <h3 class="text-2xl font-bold font-display mb-3 group-hover:text-primary transition-colors leading-tight">${event.title}</h3>
                         <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">${event.desc}</p>
                         <div class="space-y-3 pt-4 border-t border-slate-50 dark:border-slate-700/50">
-                            <div class="flex items-center gap-3 text-slate-400">
-                                <span class="material-icons-round text-sm text-primary">schedule</span>
-                                <span class="text-xs font-bold">${event.time}</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-slate-400">
-                                <span class="material-icons-round text-sm text-primary">location_on</span>
-                                <span class="text-xs font-bold">${event.location}</span>
-                            </div>
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold">${event.time}</span></div>
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold">${event.location}</span></div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
 
         function renderResources() {
             document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
                 <div class="group bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 flex items-center gap-5 hover:bg-slate-800/80 transition-all cursor-pointer">
                     <div class="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
-                    <div class="flex-grow">
-                        <h4 class="font-bold text-slate-100 text-lg leading-tight group-hover:text-accent transition-colors">${item.title}</h4>
-                        <p class="text-sm text-slate-500 mt-1">${item.desc}</p>
-                    </div>
+                    <div class="flex-grow"><h4 class="font-bold text-slate-100 text-lg group-hover:text-accent transition-colors">${item.title}</h4><p class="text-sm text-slate-500 mt-1">${item.desc}</p></div>
                     <span class="material-icons-round text-slate-500 group-hover:text-accent">file_download</span>
-                </div>
-            `).join('');
+                </div>`).join('');
             document.getElementById('software-list').innerHTML = resourcesData.software.map(item => `
                 <div class="bg-slate-800/40 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent"><span class="material-icons-round">${item.icon}</span></div>
-                        <h3 class="text-2xl font-display font-bold text-slate-100">${item.title}</h3>
-                    </div>
+                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent"><span class="material-icons-round">${item.icon}</span></div><h3 class="text-2xl font-display font-bold text-slate-100">${item.title}</h3></div>
                     <p class="text-slate-400 leading-relaxed mb-8">${item.desc}</p>
                     <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">${item.linkText} <span class="material-icons-round text-sm">file_download</span></a>
-                </div>
-            `).join('');
+                </div>`).join('');
             document.getElementById('useful-links').innerHTML = resourcesData.links.map(link => `
-                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">${link.name}</a>
-            `).join('');
+                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">${link.name}</a>`).join('');
         }
 
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.dataset.page === pageId) {
-                    link.classList.add('text-primary');
-                    link.classList.remove('text-slate-600', 'dark:text-slate-300');
-                } else {
-                    link.classList.remove('text-primary');
-                    link.classList.add('text-slate-600', 'dark:text-slate-300');
-                }
+                if (link.dataset.page === pageId) { link.classList.add('text-primary'); link.classList.remove('text-slate-600', 'dark:text-slate-300'); }
+                else { link.classList.remove('text-primary'); link.classList.add('text-slate-600', 'dark:text-slate-300'); }
             });
             document.getElementById('mobile-menu').classList.add('hidden');
             document.getElementById('menu-icon').textContent = 'menu';
