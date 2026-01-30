@@ -11,7 +11,8 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Outfit for headings, Inter for body and now clocks -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
     <script>
@@ -62,13 +63,15 @@
         .logo-glow {
             filter: drop-shadow(0 0 20px rgba(227, 30, 36, 0.3));
         }
-        /* Skeleton Animation */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: .5; }
         }
         .animate-pulse {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
         }
     </style>
 </head>
@@ -146,7 +149,7 @@
                                 Radio Club <br/>
                                 <span class="text-primary">Aconcagua</span>
                             </h1>
-                            <p class="text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0">
+                            <p class="text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0 font-light">
                                 Fomentando la radioafición desde el corazón de Las Heras. Un punto de encuentro para entusiastas de las comunicaciones y la tecnología.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -176,7 +179,7 @@
         <section id="page-activities" class="page-section pt-32 pb-20">
             <header class="text-center mb-20 px-4">
                 <h1 class="text-5xl font-display font-black mb-4">Nuestras Actividades</h1>
-                <p class="text-xl text-slate-500 max-w-2xl mx-auto">Explora los eventos, expediciones y encuentros técnicos que dan vida a nuestra comunidad.</p>
+                <p class="text-xl text-slate-500 max-w-2xl mx-auto font-light">Explora los eventos, expediciones y encuentros técnicos que dan vida a nuestra comunidad.</p>
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-3 gap-8" id="activities-container">
@@ -190,18 +193,39 @@
         <!-- RESOURCES PAGE -->
         <section id="page-resources" class="page-section pt-32 pb-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Real-time Clocks Section -->
+                <div class="mb-20 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-[2.5rem] p-8 text-center shadow-lg dark:shadow-xl backdrop-blur-sm">
+                        <div class="flex items-center justify-center gap-2 mb-3 text-primary">
+                            <span class="material-icons-round text-sm">schedule</span>
+                            <span class="text-xs font-black uppercase tracking-widest">Hora Local (Argentina)</span>
+                        </div>
+                        <div id="clock-ar" class="text-6xl md:text-7xl font-sans font-semibold text-slate-900 dark:text-slate-100 tabular-nums tracking-normal leading-none">00:00:00</div>
+                        <p class="text-slate-500 text-[10px] font-bold mt-4 uppercase tracking-tighter">UTC -03:00 / Mendoza</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-[2.5rem] p-8 text-center shadow-lg dark:shadow-xl backdrop-blur-sm">
+                        <div class="flex items-center justify-center gap-2 mb-3 text-accent">
+                            <span class="material-icons-round text-sm">public</span>
+                            <span class="text-xs font-black uppercase tracking-widest">Hora Universal (UTC)</span>
+                        </div>
+                        <div id="clock-utc" class="text-6xl md:text-7xl font-sans font-semibold text-slate-900 dark:text-slate-100 tabular-nums tracking-normal leading-none">00:00:00</div>
+                        <p class="text-slate-500 text-[10px] font-bold mt-4 uppercase tracking-tighter">Universal Coordinated Time</p>
+                    </div>
+                </div>
+
                 <div class="grid lg:grid-cols-2 gap-12 lg:gap-20">
                     <div class="space-y-8">
-                        <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
+                        <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4 mb-8">
                             <span class="material-icons-round text-accent text-3xl">menu_book</span>
                             <h2 class="text-2xl font-display font-bold">Guías y Manuales</h2>
                         </div>
                         <div class="space-y-4" id="manuals-list"></div>
                     </div>
                     <div class="space-y-8">
-                        <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
+                        <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4 mb-8">
                             <span class="material-icons-round text-accent text-3xl">terminal</span>
-                            <h2 class="text-2xl font-display font-bold">Software para Radioaficionados</h2>
+                            <h2 class="text-2xl font-display font-bold">Software</h2>
                         </div>
                         <div class="space-y-6" id="software-list"></div>
                     </div>
@@ -220,7 +244,7 @@
         <section id="page-calendar" class="page-section pt-32 pb-20">
             <header class="text-center mb-16 px-4">
                 <h1 class="text-5xl font-display font-black mb-4">Próximos Eventos</h1>
-                <p class="text-xl text-slate-500 max-w-2xl mx-auto">Sigue de cerca nuestro cronograma de cursos, concursos y reuniones.</p>
+                <p class="text-xl text-slate-500 max-w-2xl mx-auto font-light">Sigue de cerca nuestro cronograma de cursos, concursos y reuniones.</p>
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="calendar-container">
@@ -245,7 +269,7 @@
                             <p class="text-slate-400 font-mono tracking-widest uppercase text-sm">Licencia LU4MH</p>
                         </div>
                     </div>
-                    <p class="text-slate-400 max-w-md leading-relaxed">Promoviendo la educación técnica desde 1980 en Mendoza.</p>
+                    <p class="text-slate-400 max-w-md leading-relaxed font-light">Promoviendo la educación técnica desde 1980 en Mendoza.</p>
                 </div>
                 <div>
                     <h5 class="font-bold mb-6 uppercase text-xs tracking-wider text-primary">Secciones</h5>
@@ -270,7 +294,7 @@
 
     <!-- Activity Modal -->
     <div id="activity-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-all duration-300">
-        <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+        <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200 dark:border-slate-800">
             <button onclick="closeActivityModal()" class="fixed sm:absolute top-6 right-6 p-2 rounded-full bg-white dark:bg-slate-800 sm:bg-transparent shadow-lg sm:shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors z-[70]">
                 <span class="material-icons-round">close</span>
             </button>
@@ -294,118 +318,76 @@
             manuals: [
                 { title: "Plan de Repetidoras Aconcagua (2024)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
                 { title: "Guía de Estudio para Aspirantes", desc: "Material completo para los exámenes de categoría Novice y General en Argentina.", icon: "description" },
-                { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" },
-                { title: "Manual de Operación en Emergencias", desc: "Protocolos y frecuencias críticas para situaciones de catástrofe.", icon: "emergency" }
+                { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" }
             ],
             software: [
-                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales y frecuencias de emergencia.", linkText: "Descargar Archivos .IMG", icon: "settings_input_component" },
-                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8, JS8Call y Winlink en sistemas Windows y Linux para estaciones de Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
+                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales.", linkText: "Descargar .IMG", icon: "settings_input_component" },
+                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8 y JS8Call en Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
             ],
             links: [
-                { name: "ENACOM Argentina", url: "https://www.enacom.gob.ar/" },
-                { name: "Radio Club Argentino", url: "https://www.lu4aa.org/" },
-                { name: "IARU Region 2", url: "https://www.iaru-r2.org/" },
-                { name: "Solar Ham Data", url: "https://www.solarham.net/" }
+                { name: "ENACOM", url: "https://www.enacom.gob.ar/" },
+                { name: "RCA LU4AA", url: "https://www.lu4aa.org/" },
+                { name: "IARU REGION 2", url: "https://www.iaru-r2.org/" },
+                { name: "SOLAR HAM", url: "https://www.solarham.net/" }
             ]
         };
 
         /**
          * Parser de CSV Robusto
-         * Maneja correctamente saltos de línea y comas dentro de campos entrecomillados.
          */
         function parseCSV(csvText) {
             const result = [];
             let currentRow = [];
             let currentField = '';
             let inQuotes = false;
-
             for (let i = 0; i < csvText.length; i++) {
                 const char = csvText[i];
                 const nextChar = csvText[i + 1];
-
                 if (char === '"') {
-                    // Manejar comillas dobles escapadas ("")
-                    if (inQuotes && nextChar === '"') {
-                        currentField += '"';
-                        i++; 
-                    } else {
-                        inQuotes = !inQuotes;
-                    }
-                } else if (char === ',' && !inQuotes) {
-                    currentRow.push(currentField);
-                    currentField = '';
-                } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                    if (char === '\r' && nextChar === '\n') i++; // CRLF
+                    if (inQuotes && nextChar === '"') { currentField += '"'; i++; } 
+                    else { inQuotes = !inQuotes; }
+                } else if (char === ',' && !inQuotes) { currentRow.push(currentField); currentField = ''; }
+                else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') i++;
                     currentRow.push(currentField);
                     result.push(currentRow);
                     currentRow = [];
                     currentField = '';
-                } else {
-                    currentField += char;
-                }
+                } else { currentField += char; }
             }
-            if (currentRow.length > 0 || currentField !== '') {
-                currentRow.push(currentField);
-                result.push(currentRow);
-            }
-
+            if (currentRow.length > 0 || currentField !== '') { currentRow.push(currentField); result.push(currentRow); }
             if (result.length === 0) return [];
-            
             const headers = result[0].map(h => h.trim());
             return result.slice(1).map(row => {
                 const obj = {};
-                headers.forEach((header, i) => {
-                    obj[header] = row[i] ? row[i].trim() : '';
-                });
+                headers.forEach((header, i) => { obj[header] = row[i] ? row[i].trim() : ''; });
                 return obj;
             });
         }
 
         async function loadDataFromSheets() {
             if (SHEET_ID.includes('REEMPLAZA')) return;
-
             try {
-                const [actRes, calRes] = await Promise.all([
-                    fetch(SHEET_CONFIG.activities),
-                    fetch(SHEET_CONFIG.calendar)
-                ]);
-
+                const [actRes, calRes] = await Promise.all([fetch(SHEET_CONFIG.activities), fetch(SHEET_CONFIG.calendar)]);
                 if (actRes.ok) {
                     const actText = await actRes.text();
-                    activitiesData = parseCSV(actText)
-                        .filter(item => (item.Estado || '').trim() === 'Publicado')
-                        .map(item => ({
-                            title: item.Titulo || '',
-                            desc: item.Descripcion || '',
-                            category: item.Categoria || 'Evento',
-                            date: item.Fecha || '',
-                            img: item.Imagen || '',
-                            icon: 'event'
-                        }));
+                    activitiesData = parseCSV(actText).filter(item => (item.Estado || '').trim() === 'Publicado').map(item => ({
+                        title: item.Titulo || '', desc: item.Descripcion || '', category: item.Categoria || 'Evento', date: item.Fecha || '', img: item.Imagen || '', icon: 'event'
+                    }));
                 }
                 if (calRes.ok) {
                     const calText = await calRes.text();
                     const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-                    calendarData = parseCSV(calText)
-                        .filter(item => (item.Estado || '').trim() === 'Publicado')
-                        .map(item => {
-                            const dateStr = item.Fecha || '';
-                            let d = '', m = '';
-                            if (dateStr.includes('/')) {
-                                const parts = dateStr.split('/');
-                                d = parts[0];
-                                m = months[parseInt(parts[1]) - 1] || '';
-                            }
-                            return {
-                                title: item.Titulo || '',
-                                desc: item.Descripcion || '',
-                                day: d, month: m,
-                                time: item.Horario || '',
-                                location: item.Ubicacion || '',
-                                tag: item.Categoria || 'REUNIÓN',
-                                tagColor: getTagColor(item.Categoria)
-                            };
-                        });
+                    calendarData = parseCSV(calText).filter(item => (item.Estado || '').trim() === 'Publicado').map(item => {
+                        const dateStr = item.Fecha || '';
+                        let d = '', m = '';
+                        if (dateStr.includes('/')) {
+                            const parts = dateStr.split('/');
+                            d = parts[0];
+                            m = months[parseInt(parts[1]) - 1] || '';
+                        }
+                        return { title: item.Titulo || '', desc: item.Descripcion || '', day: d, month: m, time: item.Horario || '', location: item.Ubicacion || '', tag: item.Categoria || 'REUNIÓN', tagColor: getTagColor(item.Categoria) };
+                    });
                 }
             } catch (error) { console.error("Error loading data:", error); }
         }
@@ -420,12 +402,8 @@
 
         function renderActivities() {
             const container = document.getElementById('activities-container');
-            if (activitiesData.length === 0) {
-                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas.</p>';
-                return;
-            }
+            if (activitiesData.length === 0) { container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas.</p>'; return; }
             container.innerHTML = activitiesData.map((act, index) => {
-                // Remover posibles saltos de línea para el resumen de la tarjeta
                 const cleanDesc = act.desc.replace(/\r?\n|\r/g, " ");
                 const shortDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
                 return `
@@ -439,8 +417,8 @@
                             <span class="material-icons-round text-sm">${act.icon}</span>
                             <span class="text-xs font-black uppercase tracking-widest">${act.date}</span>
                         </div>
-                        <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">${act.title}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">${shortDesc}</p>
+                        <h3 class="text-xl font-display font-bold mb-3 leading-tight group-hover:text-primary transition-colors tracking-tight text-slate-900 dark:text-white">${act.title}</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow font-light">${shortDesc}</p>
                         <button onclick="openActivityModal(${index})" class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all w-fit">
                             Ver Detalles
                         </button>
@@ -453,7 +431,6 @@
             const act = activitiesData[index];
             const modal = document.getElementById('activity-modal');
             const content = document.getElementById('modal-content');
-            
             content.innerHTML = `
                 <div class="h-64 sm:h-80 overflow-hidden relative">
                     <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
@@ -464,46 +441,36 @@
                         <span class="material-icons-round text-sm">${act.icon}</span>
                         <span class="text-xs font-black uppercase tracking-widest">${act.date}</span>
                     </div>
-                    <h2 class="text-3xl sm:text-4xl font-display font-black mb-6 leading-tight text-slate-900 dark:text-white">${act.title}</h2>
+                    <h2 class="text-3xl sm:text-4xl font-display font-bold mb-6 leading-tight tracking-tight text-slate-900 dark:text-white">${act.title}</h2>
                     <div class="prose prose-slate dark:prose-invert max-w-none">
-                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line">${act.desc}</p>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line font-light">${act.desc}</p>
                     </div>
                 </div>`;
-            
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeActivityModal() {
-            document.getElementById('activity-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        document.getElementById('activity-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'activity-modal') closeActivityModal();
-        });
+        function closeActivityModal() { document.getElementById('activity-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+        document.getElementById('activity-modal').addEventListener('click', (e) => { if (e.target.id === 'activity-modal') closeActivityModal(); });
 
         function renderCalendar() {
             const container = document.getElementById('calendar-container');
-            if (calendarData.length === 0) {
-                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos.</p>';
-                return;
-            }
+            if (calendarData.length === 0) { container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos.</p>'; return; }
             container.innerHTML = calendarData.map(event => `
-                <div class="group bg-white dark:bg-slate-800 rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col h-full overflow-hidden">
+                <div class="group bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-200 dark:border-slate-700/50 flex flex-col h-full overflow-hidden">
                     <div class="p-8 pb-0 flex items-start justify-between">
-                        <div class="flex flex-col items-center justify-center w-20 h-20 bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                            <span class="text-3xl font-black leading-none">${event.day}</span>
-                            <span class="text-xs font-bold uppercase">${event.month}</span>
+                        <div class="flex flex-col items-center justify-center w-20 h-20 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <span class="text-3xl font-display font-bold leading-none tracking-tighter text-slate-900 dark:text-slate-100">${event.day}</span>
+                            <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">${event.month}</span>
                         </div>
                         <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
                     </div>
                     <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold font-display mb-3 group-hover:text-primary transition-colors leading-tight">${event.title}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 whitespace-pre-line">${event.desc}</p>
-                        <div class="space-y-3 pt-4 border-t border-slate-50 dark:border-slate-700/50">
-                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold">${event.time}</span></div>
-                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold">${event.location}</span></div>
+                        <h3 class="text-2xl font-display font-bold mb-3 group-hover:text-primary transition-colors leading-tight tracking-tight text-slate-900 dark:text-white">${event.title}</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 whitespace-pre-line font-light">${event.desc}</p>
+                        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold uppercase tracking-tight">${event.time}</span></div>
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold uppercase tracking-tight">${event.location}</span></div>
                         </div>
                     </div>
                 </div>`).join('');
@@ -511,19 +478,19 @@
 
         function renderResources() {
             document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
-                <div class="group bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 flex items-center gap-5 hover:bg-slate-800/80 transition-all cursor-pointer">
-                    <div class="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
-                    <div class="flex-grow"><h4 class="font-bold text-slate-100 text-lg group-hover:text-accent transition-colors">${item.title}</h4><p class="text-sm text-slate-500 mt-1">${item.desc}</p></div>
-                    <span class="material-icons-round text-slate-500 group-hover:text-accent">file_download</span>
+                <div class="group bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-5 flex items-center gap-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                    <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700/50 rounded flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
+                    <div class="flex-grow"><h4 class="font-display font-bold text-slate-900 dark:text-slate-100 text-lg group-hover:text-accent transition-colors tracking-tight">${item.title}</h4><p class="text-xs text-slate-500 dark:text-slate-500 mt-1 uppercase font-bold">${item.desc}</p></div>
+                    <span class="material-icons-round text-slate-400 dark:text-slate-500 group-hover:text-accent">file_download</span>
                 </div>`).join('');
             document.getElementById('software-list').innerHTML = resourcesData.software.map(item => `
-                <div class="bg-slate-800/40 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10">
-                    <div class="flex items-center gap-4 mb-6"><div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent"><span class="material-icons-round">${item.icon}</span></div><h3 class="text-2xl font-display font-bold text-slate-100">${item.title}</h3></div>
-                    <p class="text-slate-400 leading-relaxed mb-8">${item.desc}</p>
+                <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-[2.5rem] p-8 md:p-10 shadow-sm dark:shadow-none">
+                    <div class="flex items-center gap-4 mb-6"><div class=\"w-12 h-12 bg-accent/10 dark:bg-accent/20 rounded flex items-center justify-center text-accent\"><span class=\"material-icons-round\">${item.icon}</span></div><h3 class=\"text-2xl font-display font-bold text-slate-900 dark:text-slate-100 uppercase tracking-tight\">${item.title}</h3></div>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-8 font-light">${item.desc}</p>
                     <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">${item.linkText} <span class="material-icons-round text-sm">file_download</span></a>
                 </div>`).join('');
             document.getElementById('useful-links').innerHTML = resourcesData.links.map(link => `
-                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">${link.name}</a>`).join('');
+                <a href="${link.url}" target="_blank" class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-6 text-center font-bold text-xs uppercase text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-accent hover:border-accent transition-all shadow-sm dark:shadow-none">${link.name}</a>`).join('');
         }
 
         function showPage(pageId) {
@@ -546,8 +513,22 @@
             icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
         }
 
+        function updateClocks() {
+            const arClock = document.getElementById('clock-ar');
+            const utcClock = document.getElementById('clock-utc');
+            if (!arClock || !utcClock) return;
+            const now = new Date();
+            // Use Inter (font-sans) for a normal/elegant look
+            const arTime = now.toLocaleTimeString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const utcTime = now.toLocaleTimeString('es-AR', { timeZone: 'UTC', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            arClock.textContent = arTime;
+            utcClock.textContent = utcTime;
+        }
+
         window.onload = async () => {
             renderResources();
+            updateClocks();
+            setInterval(updateClocks, 1000);
             await loadDataFromSheets();
             renderActivities();
             renderCalendar();
