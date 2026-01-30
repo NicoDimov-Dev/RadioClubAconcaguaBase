@@ -227,7 +227,6 @@
                             <span class="material-icons-round text-accent text-3xl">terminal</span>
                             <h2 class="text-2xl font-display font-bold">Software</h2>
                         </div>
-                        <!-- Updated software-list container to match morphology -->
                         <div class="space-y-4" id="software-list"></div>
                     </div>
                 </div>
@@ -317,7 +316,7 @@
 
         const resourcesData = {
             manuals: [
-                { title: "Plan de Repetidoras Aconcagua (2024)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
+                { title: "Plan de Repetidoras Aconcagua (2026)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
                 { title: "Guía de Estudio para Aspirantes", desc: "Material completo para los exámenes de categoría Novice y General en Argentina.", icon: "description" },
                 { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" }
             ],
@@ -333,9 +332,6 @@
             ]
         };
 
-        /**
-         * Parser de CSV Robusto
-         */
         function parseCSV(csvText) {
             const result = [];
             let currentRow = [];
@@ -407,11 +403,13 @@
             container.innerHTML = activitiesData.map((act, index) => {
                 const cleanDesc = act.desc.replace(/\r?\n|\r/g, " ");
                 const shortDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
+                const tagColor = getTagColor(act.category);
                 return `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700 flex flex-col">
                     <div class="h-56 overflow-hidden relative">
                         <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                        <div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">${act.category}</div>
+                        <!-- Unified Tag Morphology -->
+                        <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
                     </div>
                     <div class="p-8 flex-grow flex flex-col">
                         <div class="flex items-center gap-2 text-primary mb-3">
@@ -432,10 +430,13 @@
             const act = activitiesData[index];
             const modal = document.getElementById('activity-modal');
             const content = document.getElementById('modal-content');
+            const tagColor = getTagColor(act.category);
+
             content.innerHTML = `
                 <div class="h-64 sm:h-80 overflow-hidden relative">
                     <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                    <div class="absolute top-6 left-6 bg-primary text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">${act.category}</div>
+                    <!-- Unified Tag Morphology in Modal -->
+                    <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
                 </div>
                 <div class="p-8 sm:p-12">
                     <div class="flex items-center gap-2 text-primary mb-4">
@@ -464,6 +465,7 @@
                             <span class="text-3xl font-display font-bold leading-none tracking-tighter text-slate-900 dark:text-slate-100">${event.day}</span>
                             <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">${event.month}</span>
                         </div>
+                        <!-- Unified Tag Morphology -->
                         <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
                     </div>
                     <div class="p-8 flex-grow">
@@ -478,7 +480,6 @@
         }
 
         function renderResources() {
-            // Render Manuals (List Style)
             document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
                 <div class="group bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-5 flex items-center gap-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700/50 rounded flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
@@ -486,7 +487,6 @@
                     <span class="material-icons-round text-slate-400 dark:text-slate-500 group-hover:text-accent">file_download</span>
                 </div>`).join('');
 
-            // Render Software (Updated to match Manuals List Style)
             document.getElementById('software-list').innerHTML = resourcesData.software.map(item => `
                 <div class="group bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-5 flex items-center gap-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700/50 rounded flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
