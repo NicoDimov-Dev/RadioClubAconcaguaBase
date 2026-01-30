@@ -227,7 +227,8 @@
                             <span class="material-icons-round text-accent text-3xl">terminal</span>
                             <h2 class="text-2xl font-display font-bold">Software</h2>
                         </div>
-                        <div class="space-y-6" id="software-list"></div>
+                        <!-- Updated software-list container to match morphology -->
+                        <div class="space-y-4" id="software-list"></div>
                     </div>
                 </div>
                 <div class="mt-32">
@@ -321,8 +322,8 @@
                 { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" }
             ],
             software: [
-                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales.", linkText: "Descargar .IMG", icon: "settings_input_component" },
-                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8 y JS8Call en Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
+                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios con repetidoras locales.", icon: "settings_input_component" },
+                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8 y JS8Call en Mendoza.", icon: "cell_tower" }
             ],
             links: [
                 { name: "ENACOM", url: "https://www.enacom.gob.ar/" },
@@ -477,18 +478,22 @@
         }
 
         function renderResources() {
+            // Render Manuals (List Style)
             document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
                 <div class="group bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-5 flex items-center gap-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700/50 rounded flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
                     <div class="flex-grow"><h4 class="font-display font-bold text-slate-900 dark:text-slate-100 text-lg group-hover:text-accent transition-colors tracking-tight">${item.title}</h4><p class="text-xs text-slate-500 dark:text-slate-500 mt-1 uppercase font-bold">${item.desc}</p></div>
                     <span class="material-icons-round text-slate-400 dark:text-slate-500 group-hover:text-accent">file_download</span>
                 </div>`).join('');
+
+            // Render Software (Updated to match Manuals List Style)
             document.getElementById('software-list').innerHTML = resourcesData.software.map(item => `
-                <div class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-[2.5rem] p-8 md:p-10 shadow-sm dark:shadow-none">
-                    <div class="flex items-center gap-4 mb-6"><div class=\"w-12 h-12 bg-accent/10 dark:bg-accent/20 rounded flex items-center justify-center text-accent\"><span class=\"material-icons-round\">${item.icon}</span></div><h3 class=\"text-2xl font-display font-bold text-slate-900 dark:text-slate-100 uppercase tracking-tight\">${item.title}</h3></div>
-                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-8 font-light">${item.desc}</p>
-                    <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">${item.linkText} <span class="material-icons-round text-sm">file_download</span></a>
+                <div class="group bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-5 flex items-center gap-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                    <div class="w-12 h-12 bg-slate-100 dark:bg-slate-700/50 rounded flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
+                    <div class="flex-grow"><h4 class="font-display font-bold text-slate-900 dark:text-slate-100 text-lg group-hover:text-accent transition-colors tracking-tight">${item.title}</h4><p class="text-xs text-slate-500 dark:text-slate-500 mt-1 uppercase font-bold">${item.desc}</p></div>
+                    <span class="material-icons-round text-slate-400 dark:text-slate-500 group-hover:text-accent">launch</span>
                 </div>`).join('');
+
             document.getElementById('useful-links').innerHTML = resourcesData.links.map(link => `
                 <a href="${link.url}" target="_blank" class="bg-white dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-xl p-6 text-center font-bold text-xs uppercase text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-accent hover:border-accent transition-all shadow-sm dark:shadow-none">${link.name}</a>`).join('');
         }
@@ -518,7 +523,6 @@
             const utcClock = document.getElementById('clock-utc');
             if (!arClock || !utcClock) return;
             const now = new Date();
-            // Use Inter (font-sans) for a normal/elegant look
             const arTime = now.toLocaleTimeString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const utcTime = now.toLocaleTimeString('es-AR', { timeZone: 'UTC', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             arClock.textContent = arTime;
