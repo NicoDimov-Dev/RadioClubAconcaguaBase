@@ -59,9 +59,16 @@
         .page-section.active {
             display: block;
         }
-        /* Logo glow effect from the image */
         .logo-glow {
             filter: drop-shadow(0 0 20px rgba(227, 30, 36, 0.3));
+        }
+        /* Skeleton Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
 </head>
@@ -89,20 +96,12 @@
                         <button onclick="showPage('resources')" class="nav-link text-sm font-semibold transition-colors hover:text-primary text-slate-600 dark:text-slate-300" data-page="resources">Recursos</button>
                         <button onclick="showPage('calendar')" class="nav-link text-sm font-semibold transition-colors hover:text-primary text-slate-600 dark:text-slate-300" data-page="calendar">Calendario</button>
                     </div>
-                    
                     <div class="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
-                    
                     <div class="flex items-center gap-4 px-2">
-                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Facebook">
-                            <span class="material-icons-round text-xl">facebook</span>
-                        </a>
-                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Instagram">
-                            <span class="material-icons-round text-xl">camera_alt</span>
-                        </a>
+                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Facebook"><span class="material-icons-round text-xl">facebook</span></a>
+                        <a href="#" class="text-slate-500 hover:text-primary transition-colors flex items-center" title="Instagram"><span class="material-icons-round text-xl">camera_alt</span></a>
                     </div>
-                    
                     <div class="h-6 w-px bg-slate-300 dark:bg-slate-700"></div>
-                    
                     <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors ml-2" aria-label="Cambiar tema">
                         <span class="material-icons-round text-xl block dark:hidden">dark_mode</span>
                         <span class="material-icons-round text-xl hidden dark:block text-yellow-400">light_mode</span>
@@ -122,7 +121,6 @@
             </div>
         </div>
         
-        <!-- Mobile Menu Panel -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4">
             <button onclick="showPage('home')" class="block w-full text-left font-bold text-lg">Inicio</button>
             <button onclick="showPage('activities')" class="block w-full text-left font-bold text-lg">Actividades</button>
@@ -138,7 +136,6 @@
         <section id="page-home" class="page-section active">
             <div class="min-h-screen flex flex-col justify-center relative pt-16 overflow-hidden">
                 <div class="absolute inset-0 hero-pattern opacity-10"></div>
-                <!-- Radial Gradient Glow -->
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
                 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -153,30 +150,18 @@
                                 Fomentando la radioafición desde el corazón de Las Heras. Un punto de encuentro para entusiastas de las comunicaciones y la tecnología.
                             </p>
                             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <!-- Smaller "Unirse al Club" button and removed "Ver Frecuencias" -->
                                 <button class="px-8 py-3.5 bg-primary hover:bg-red-600 text-white rounded-2xl font-bold text-base shadow-xl shadow-primary/20 transition-all hover:scale-105">
                                     Unirse al Club
                                 </button>
                             </div>
-                            
                             <div class="mt-12 flex items-center justify-center lg:justify-start gap-8 text-slate-500 dark:text-slate-400">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-icons-round text-primary">location_on</span>
-                                    <span class="text-sm font-bold">Las Heras, Mendoza</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="material-icons-round text-primary">radio</span>
-                                    <span class="text-sm font-bold">LU4MH</span>
-                                </div>
+                                <div class="flex items-center gap-2"><span class="material-icons-round text-primary">location_on</span><span class="text-sm font-bold">Las Heras, Mendoza</span></div>
+                                <div class="flex items-center gap-2"><span class="material-icons-round text-primary">radio</span><span class="text-sm font-bold">LU4MH</span></div>
                             </div>
                         </div>
-                        
-                        <!-- Visual Logo Section -->
                         <div class="flex justify-center items-center relative">
                             <div class="relative w-full max-w-[500px] aspect-square flex items-center justify-center">
-                                <!-- Multi-layered glow -->
                                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-[80px]"></div>
-                                <!-- Removed styled container, kept only the logo centered over the glow -->
                                 <div class="relative w-full h-full flex items-center justify-center p-4">
                                     <img src="https://iili.io/fL0tv5v.png" alt="Radio Club Aconcagua Logo" class="w-full h-full object-contain logo-glow" />
                                 </div>
@@ -195,7 +180,10 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-3 gap-8" id="activities-container">
-                    <!-- Cards populated by JS -->
+                    <!-- Loading Skeleton -->
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-96"></div>
                 </div>
             </div>
         </section>
@@ -204,38 +192,27 @@
         <section id="page-resources" class="page-section pt-32 pb-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-12 lg:gap-20">
-                    <!-- Left Column: Guías y Manuales -->
                     <div class="space-y-8">
                         <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
                             <span class="material-icons-round text-accent text-3xl">menu_book</span>
                             <h2 class="text-2xl font-display font-bold">Guías y Manuales</h2>
                         </div>
-                        <div class="space-y-4" id="manuals-list">
-                            <!-- Populated via script -->
-                        </div>
+                        <div class="space-y-4" id="manuals-list"></div>
                     </div>
-
-                    <!-- Right Column: Software -->
                     <div class="space-y-8">
                         <div class="flex items-center gap-3 border-b border-slate-700/50 pb-4 mb-8">
                             <span class="material-icons-round text-accent text-3xl">terminal</span>
                             <h2 class="text-2xl font-display font-bold">Software para Radioaficionados</h2>
                         </div>
-                        <div class="space-y-6" id="software-list">
-                            <!-- Populated via script -->
-                        </div>
+                        <div class="space-y-6" id="software-list"></div>
                     </div>
                 </div>
-
-                <!-- Useful Links Section -->
                 <div class="mt-32">
                     <div class="text-center mb-16">
                         <h2 class="text-4xl font-display font-black">Enlaces de Interés</h2>
                         <div class="w-16 h-1 bg-accent mx-auto mt-4 rounded-full"></div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="useful-links">
-                        <!-- Populated via script -->
-                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="useful-links"></div>
                 </div>
             </div>
         </section>
@@ -248,11 +225,12 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="calendar-container">
-                    <!-- Populated via script -->
+                    <!-- Loading Skeleton -->
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
                 </div>
             </div>
         </section>
-
     </div>
 
     <!-- Footer -->
@@ -262,7 +240,6 @@
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-12 h-12 flex items-center justify-center overflow-hidden">
-                            <!-- Removed white background from footer logo as well for consistency -->
                             <img src="https://iili.io/fL0tv5v.png" alt="Logo" class="w-full h-full object-contain" />
                         </div>
                         <div>
@@ -270,116 +247,111 @@
                             <p class="text-slate-400 font-mono tracking-widest uppercase text-sm">Licencia LU4MH</p>
                         </div>
                     </div>
-                    <p class="text-slate-400 max-w-md leading-relaxed">
-                        Abierto a todos los entusiastas, técnicos y soñadores que deseen explorar el vasto mundo de la radiofrecuencia en Mendoza. Promoviendo la educación técnica desde 1980.
-                    </p>
+                    <p class="text-slate-400 max-w-md leading-relaxed">Promoviendo la educación técnica desde 1980 en Mendoza.</p>
                 </div>
-                
                 <div>
                     <h5 class="font-bold mb-6 uppercase text-xs tracking-wider text-primary">Secciones</h5>
                     <ul class="space-y-4 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Cursos de Ingreso</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Cursos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Reglamentaciones</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Calendario de Eventos</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Galería de Fotos</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h5 class="font-bold mb-6 uppercase text-xs tracking-wider text-primary">Contacto</h5>
                     <ul class="space-y-4 text-slate-400 text-sm">
-                        <li class="flex items-center gap-3">
-                            <span class="material-icons-round text-sm text-primary">mail</span> 
-                            contacto@lu4mh.com.ar
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <span class="material-icons-round text-sm text-primary">phone</span> 
-                            +54 (261) 123 4567
-                        </li>
+                        <li>contacto@lu4mh.com.ar</li>
+                        <li>+54 (261) 123 4567</li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-slate-500 text-xs">
-                <p>© 2026 Radio Club Aconcagua - LU4MH. Mendoza, Argentina.</p>
-                <div class="flex gap-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-slate-300">Privacidad</a>
-                    <a href="#" class="hover:text-slate-300">Términos</a>
-                </div>
+            <div class="mt-16 pt-8 border-t border-slate-800 flex justify-between text-slate-500 text-xs">
+                <p>© 2024 Radio Club Aconcagua - LU4MH.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Data Objects
-        const activitiesData = [
+        // --- GOOGLE SHEETS CONFIGURATION ---
+        // 1. Publish your sheet to the web as CSV.
+        // 2. Put your Sheet ID here.
+        const SHEET_ID = '1vdm3PfvJBL8e8OJohTWAKt74FjR0Igi4RNMY-OUPV30'; 
+        
+        const SHEET_CONFIG = {
+            activities: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Actividades`,
+            calendar: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Calendario`
+        };
+
+        // Fallback data (Used if SHEET_ID is not set or fetch fails)
+        let activitiesData = [
             {
                 title: "Expedición Cerro Aconcagua",
                 date: "Oct 24, 2023",
                 category: "Salida al campo",
                 icon: "event",
-                desc: "Operaciones exitosas en VHF/UHF a 3.000m de altura. Logramos comunicados con operadores de todo el Cono Sur.",
+                desc: "Operaciones exitosas en VHF/UHF a 3.000m de altura.",
                 img: "https://www.buytwowayradios.com/wp/wp-content/uploads/2/sites/2/images/landscape-nature-mountain-snow-black-and-white-hiking-546355.jpg"
-            },
-            {
-                title: "Taller Técnico Mensual",
-                date: "Nov 02, 2023",
-                category: "Encuentro",
-                icon: "groups",
-                desc: "Sesión práctica sobre construcción de antenas y ajuste de ROE para nuevos socios y aspirantes.",
-                img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=600"
-            },
-            {
-                title: "Simulacro de Emergencia",
-                date: "Nov 15, 2023",
-                category: "Simulacro",
-                icon: "warning",
-                desc: "Simulación de caída de red eléctrica y establecimiento de enlaces críticos en toda la provincia de Mendoza.",
-                img: "https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&q=80&w=600"
             }
         ];
 
-        const calendarData = [
+        let calendarData = [
             {
                 day: '04', month: 'MAY', title: 'Inicio Curso Aspirante', tag: 'CURSO',
                 tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
                 desc: 'Capacitación para obtener la señal distintiva inicial.',
                 time: '15:00 HS', location: 'Sede Social'
-            },
-            {
-                day: '11', month: 'MAY', title: 'Concurso CW Aconcagua', tag: 'CONCURSO',
-                tagColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-                desc: 'Competencia anual de telegrafía en bandas de 40m y 80m.',
-                time: '18:00 HS', location: 'Todas las Bandas'
-            },
-            {
-                day: '01', month: 'JUN', title: 'Activación SOTA', tag: 'EXPEDICIÓN',
-                tagColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-                desc: 'Activación de la cumbre del Cerro Arco en VHF/UHF.',
-                time: '08:00 HS', location: 'Cerro Arco'
             }
         ];
 
         const resourcesData = {
             manuals: [
-                { title: "Plan de Repetidoras Aconcagua (2026)", desc: "Listado actualizado de repetidoras VHF/UHF en la región de Cuyo.", icon: "picture_as_pdf" },
-                { title: "Guía de Estudio para Aspirantes", desc: "Material completo para los exámenes de categoría Novice y General en Argentina.", icon: "description" },
-                { title: "Diseños de Antenas de Hilo DIY", desc: "Diseños simples y efectivos para espacios reducidos en bandas de HF.", icon: "settings_input_antenna" },
-                { title: "Manual de Operación en Emergencias", desc: "Protocolos y frecuencias críticas para situaciones de catástrofe.", icon: "emergency" }
+                { title: "Plan de Repetidoras (2024)", desc: "Listado de repetidoras region Cuyo.", icon: "picture_as_pdf" },
+                { title: "Guía de Estudio", desc: "Material para exámenes Novice y General.", icon: "description" }
             ],
             software: [
-                { title: "Gestión de Memorias CHIRP", desc: "Descarga archivos de configuración .IMG para radios Baofeng, Yaesu e Icom precargados con las repetidoras locales y frecuencias de emergencia.", linkText: "Descargar Archivos .IMG", icon: "settings_input_component" },
-                { title: "Configuración Modos Digitales", desc: "Tutoriales paso a paso para configurar FT8, JS8Call y Winlink en sistemas Windows y Linux para estaciones de Mendoza.", linkText: "Ver Tutoriales", icon: "cell_tower" }
+                { title: "Gestión CHIRP", desc: "Archivos .IMG precargados.", linkText: "Descargar .IMG", icon: "settings_input_component" }
             ],
             links: [
-                { name: "ENACOM Argentina", url: "https://www.enacom.gob.ar/" },
-                { name: "Radio Club Argentino", url: "https://www.lu4aa.org/" },
-                { name: "IARU Region 2", url: "https://www.iaru-r2.org/" },
-                { name: "Solar Ham Data", url: "https://www.solarham.net/" }
+                { name: "ENACOM", url: "https://www.enacom.gob.ar/" },
+                { name: "LU4AA", url: "https://www.lu4aa.org/" }
             ]
         };
 
-        // Rendering Functions
+        // Simple CSV Parser
+        function parseCSV(csvText) {
+            const rows = csvText.split(/\r?\n/);
+            const headers = rows[0].split(',').map(h => h.replace(/"/g, '').trim());
+            return rows.slice(1).filter(row => row.trim() !== '').map(row => {
+                const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // Split by comma but respect quotes
+                const obj = {};
+                headers.forEach((header, i) => {
+                    obj[header] = values[i] ? values[i].replace(/"/g, '').trim() : '';
+                });
+                return obj;
+            });
+        }
+
+        async function loadDataFromSheets() {
+            if (SHEET_ID === 'YOUR_SHEET_ID_HERE') return;
+
+            try {
+                const [actRes, calRes] = await Promise.all([
+                    fetch(SHEET_CONFIG.activities),
+                    fetch(SHEET_CONFIG.calendar)
+                ]);
+
+                if (actRes.ok) {
+                    const actText = await actRes.text();
+                    activitiesData = parseCSV(actText);
+                }
+                if (calRes.ok) {
+                    const calText = await calRes.text();
+                    calendarData = parseCSV(calText);
+                }
+            } catch (error) {
+                console.error("Error loading from Google Sheets:", error);
+            }
+        }
+
         function renderActivities() {
             const container = document.getElementById('activities-container');
             container.innerHTML = activitiesData.map(act => `
@@ -410,7 +382,7 @@
                             <span class="text-3xl font-black leading-none">${event.day}</span>
                             <span class="text-xs font-bold uppercase">${event.month}</span>
                         </div>
-                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
+                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor || 'bg-slate-100 text-slate-700'}">${event.tag}</span>
                     </div>
                     <div class="p-8 flex-grow">
                         <h3 class="text-2xl font-bold font-display mb-3 group-hover:text-primary transition-colors leading-tight">${event.title}</h3>
@@ -427,13 +399,9 @@
         }
 
         function renderResources() {
-            // Render Manuals
-            const manualsList = document.getElementById('manuals-list');
-            manualsList.innerHTML = resourcesData.manuals.map(item => `
+            document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
                 <div class="group bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5 flex items-center gap-5 hover:bg-slate-800/80 transition-all cursor-pointer">
-                    <div class="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all">
-                        <span class="material-icons-round">${item.icon}</span>
-                    </div>
+                    <div class="w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all"><span class="material-icons-round">${item.icon}</span></div>
                     <div class="flex-grow">
                         <h4 class="font-bold text-slate-100 text-lg leading-tight group-hover:text-accent transition-colors">${item.title}</h4>
                         <p class="text-sm text-slate-500 mt-1">${item.desc}</p>
@@ -441,38 +409,24 @@
                     <span class="material-icons-round text-slate-500 group-hover:text-accent">file_download</span>
                 </div>
             `).join('');
-
-            // Render Software
-            const softwareList = document.getElementById('software-list');
-            softwareList.innerHTML = resourcesData.software.map(item => `
+            document.getElementById('software-list').innerHTML = resourcesData.software.map(item => `
                 <div class="bg-slate-800/40 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent">
-                            <span class="material-icons-round">${item.icon}</span>
-                        </div>
+                        <div class="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent"><span class="material-icons-round">${item.icon}</span></div>
                         <h3 class="text-2xl font-display font-bold text-slate-100">${item.title}</h3>
                     </div>
                     <p class="text-slate-400 leading-relaxed mb-8">${item.desc}</p>
-                    <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">
-                        ${item.linkText} <span class="material-icons-round text-sm">${item.linkText.includes('VER') ? 'launch' : 'file_download'}</span>
-                    </a>
+                    <a href="#" class="inline-flex items-center gap-2 text-accent font-black text-xs uppercase tracking-widest hover:underline">${item.linkText} <span class="material-icons-round text-sm">file_download</span></a>
                 </div>
             `).join('');
-
-            // Render Links
-            const usefulLinks = document.getElementById('useful-links');
-            usefulLinks.innerHTML = resourcesData.links.map(link => `
-                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">
-                    ${link.name}
-                </a>
+            document.getElementById('useful-links').innerHTML = resourcesData.links.map(link => `
+                <a href="${link.url}" target="_blank" class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center font-bold text-slate-300 hover:bg-slate-800 hover:text-accent hover:border-accent transition-all">${link.name}</a>
             `).join('');
         }
 
-        // Logic Functions
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
-            
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.dataset.page === pageId) {
                     link.classList.add('text-primary');
@@ -482,17 +436,12 @@
                     link.classList.add('text-slate-600', 'dark:text-slate-300');
                 }
             });
-
             document.getElementById('mobile-menu').classList.add('hidden');
             document.getElementById('menu-icon').textContent = 'menu';
-            
             window.scrollTo(0, 0);
         }
 
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-        }
-
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('menu-icon');
@@ -500,13 +449,12 @@
             icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
         }
 
-        // Initialization
-        window.onload = () => {
+        window.onload = async () => {
+            renderResources(); // Resources are static for now
+            await loadDataFromSheets();
             renderActivities();
             renderCalendar();
-            renderResources();
         };
     </script>
 </body>
 </html>
-
