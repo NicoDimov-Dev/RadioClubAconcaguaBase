@@ -363,19 +363,34 @@
                 if (calRes.ok) {
                     const calText = await calRes.text();
                     const rawCalendar = parseCSV(calText);
+                    
+                    const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+
                     // Filtrar por Estado "Publicado" y mapear
                     calendarData = rawCalendar
                         .filter(item => (item.Estado || '').trim() === 'Publicado')
-                        .map(item => ({
-                            title: item.Titulo || item.title || '',
-                            desc: item.Descripcion || item.desc || '',
-                            day: item.Dia || item.day || '',
-                            month: item.Mes || item.month || '',
-                            time: item.Horario || item.time || '',
-                            location: item.Ubicacion || item.location || '',
-                            tag: item.Categoria || item.tag || 'REUNIÓN',
-                            tagColor: getTagColor(item.Categoria || item.tag)
-                        }));
+                        .map(item => {
+                            // Procesar la columna "Fecha" (1/2/2025)
+                            const dateStr = item.Fecha || '';
+                            let d = '', m = '';
+                            if (dateStr.includes('/')) {
+                                const parts = dateStr.split('/');
+                                d = parts[0];
+                                const monthNum = parseInt(parts[1]);
+                                m = months[monthNum - 1] || '';
+                            }
+
+                            return {
+                                title: item.Titulo || item.title || '',
+                                desc: item.Descripcion || item.desc || '',
+                                day: d,
+                                month: m,
+                                time: item.Horario || item.time || '',
+                                location: item.Ubicacion || item.location || '',
+                                tag: item.Categoria || item.tag || 'REUNIÓN',
+                                tagColor: getTagColor(item.Categoria || item.tag)
+                            };
+                        });
                 }
             } catch (error) {
                 console.error("Error cargando datos:", error);
