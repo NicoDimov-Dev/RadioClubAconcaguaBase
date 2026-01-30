@@ -348,30 +348,34 @@
                 if (actRes.ok) {
                     const actText = await actRes.text();
                     const rawActivities = parseCSV(actText);
-                    // Mapeo de headers específicos de Actividades
-                    activitiesData = rawActivities.map(item => ({
-                        title: item.Titulo || item.title || '',
-                        desc: item.Descripcion || item.desc || '',
-                        category: item.Categoria || item.category || 'Evento',
-                        date: item.Fecha || item.date || '',
-                        img: item.Imagen || item.img || '',
-                        icon: 'event'
-                    }));
+                    // Filtrar por Estado "Publicado" y mapear
+                    activitiesData = rawActivities
+                        .filter(item => (item.Estado || '').trim() === 'Publicado')
+                        .map(item => ({
+                            title: item.Titulo || item.title || '',
+                            desc: item.Descripcion || item.desc || '',
+                            category: item.Categoria || item.category || 'Evento',
+                            date: item.Fecha || item.date || '',
+                            img: item.Imagen || item.img || '',
+                            icon: 'event'
+                        }));
                 }
                 if (calRes.ok) {
                     const calText = await calRes.text();
                     const rawCalendar = parseCSV(calText);
-                    // Mapeo de headers específicos de Calendario
-                    calendarData = rawCalendar.map(item => ({
-                        title: item.Titulo || item.title || '',
-                        desc: item.Descripcion || item.desc || '',
-                        day: item.Dia || item.day || '',
-                        month: item.Mes || item.month || '',
-                        time: item.Horario || item.time || '',
-                        location: item.Ubicacion || item.location || '',
-                        tag: item.Categoria || item.tag || 'REUNIÓN',
-                        tagColor: getTagColor(item.Categoria || item.tag)
-                    }));
+                    // Filtrar por Estado "Publicado" y mapear
+                    calendarData = rawCalendar
+                        .filter(item => (item.Estado || '').trim() === 'Publicado')
+                        .map(item => ({
+                            title: item.Titulo || item.title || '',
+                            desc: item.Descripcion || item.desc || '',
+                            day: item.Dia || item.day || '',
+                            month: item.Mes || item.month || '',
+                            time: item.Horario || item.time || '',
+                            location: item.Ubicacion || item.location || '',
+                            tag: item.Categoria || item.tag || 'REUNIÓN',
+                            tagColor: getTagColor(item.Categoria || item.tag)
+                        }));
                 }
             } catch (error) {
                 console.error("Error cargando datos:", error);
@@ -388,7 +392,10 @@
 
         function renderActivities() {
             const container = document.getElementById('activities-container');
-            if (activitiesData.length === 0) return;
+            if (activitiesData.length === 0) {
+                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas por el momento.</p>';
+                return;
+            }
             container.innerHTML = activitiesData.map(act => `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700">
                     <div class="h-56 overflow-hidden relative">
@@ -410,7 +417,10 @@
 
         function renderCalendar() {
             const container = document.getElementById('calendar-container');
-            if (calendarData.length === 0) return;
+            if (calendarData.length === 0) {
+                container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos publicados.</p>';
+                return;
+            }
             container.innerHTML = calendarData.map(event => `
                 <div class="group bg-white dark:bg-slate-800 rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-100 dark:border-slate-700 flex flex-col h-full overflow-hidden">
                     <div class="p-8 pb-0 flex items-start justify-between">
