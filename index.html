@@ -248,7 +248,7 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="calendar-container">
-                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
+                    <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64 text-center flex items-center justify-center">Cargando...</div>
                     <div class="animate-pulse bg-slate-200 dark:bg-slate-800 rounded-3xl h-64"></div>
                 </div>
             </div>
@@ -292,7 +292,7 @@
         </div>
     </footer>
 
-    <!-- Activity Modal -->
+    <!-- Activity/Calendar Modal -->
     <div id="activity-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm transition-all duration-300">
         <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative border border-slate-200 dark:border-slate-800">
             <button onclick="closeActivityModal()" class="fixed sm:absolute top-6 right-6 p-2 rounded-full bg-white dark:bg-slate-800 sm:bg-transparent shadow-lg sm:shadow-none hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors z-[70]">
@@ -332,6 +332,19 @@
             ]
         };
 
+        /**
+         * Helper to convert URLs in text to blue clickable links
+         */
+        function linkify(text) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline underline-offset-2 break-all">${url}</a>`;
+            });
+        }
+
+        /**
+         * Robust CSV Parser
+         */
         function parseCSV(csvText) {
             const result = [];
             let currentRow = [];
@@ -383,14 +396,22 @@
                             d = parts[0];
                             m = months[parseInt(parts[1]) - 1] || '';
                         }
-                        return { title: item.Titulo || '', desc: item.Descripcion || '', day: d, month: m, time: item.Horario || '', location: item.Ubicacion || '', tag: item.Categoria || 'REUNIÓN', tagColor: getTagColor(item.Categoria) };
+                        return { 
+                            title: item.Titulo || '', 
+                            desc: item.Descripcion || '', 
+                            day: d, 
+                            month: m, 
+                            time: item.Horario || '', 
+                            location: item.Ubicacion || '', 
+                            tag: item.Categoria || 'REUNIÓN', 
+                            tagColor: getTagColor(item.Categoria) 
+                        };
                     });
                 }
             } catch (error) { console.error("Error loading data:", error); }
         }
 
         function getTagColor(tag) {
-            // Unified tag style for everything as requested: bg-red-600 text-red-50 dark:bg-red-700 dark:text-red-100
             return 'bg-red-600 text-red-50 dark:bg-red-700 dark:text-red-100';
         }
 
@@ -398,14 +419,13 @@
             const container = document.getElementById('activities-container');
             if (activitiesData.length === 0) { container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay actividades publicadas.</p>'; return; }
             container.innerHTML = activitiesData.map((act, index) => {
-                const cleanDesc = act.desc.replace(/\r?\n|\r/g, " ");
-                const shortDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
+                const cleanDescForCard = act.desc.replace(/\r?\n|\r/g, " ");
+                const shortDesc = cleanDescForCard.length > 120 ? cleanDescForCard.substring(0, 120) + '...' : cleanDescForCard;
                 const tagColor = getTagColor(act.category);
                 return `
                 <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-slate-200 dark:border-slate-700 flex flex-col">
                     <div class="h-56 overflow-hidden relative">
                         <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                        <!-- Unified Tag Morphology -->
                         <div class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
                     </div>
                     <div class="p-8 flex-grow flex flex-col">
@@ -415,7 +435,7 @@
                         </div>
                         <h3 class="text-xl font-display font-bold mb-3 leading-tight group-hover:text-primary transition-colors tracking-tight text-slate-900 dark:text-white">${act.title}</h3>
                         <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow font-light">${shortDesc}</p>
-                        <button onclick="openActivityModal(${index})" class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all w-fit">
+                        <button onclick="openActivityModal(${index})" class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all w-fit uppercase tracking-wider text-[10px]">
                             Ver Detalles
                         </button>
                     </div>
@@ -428,11 +448,11 @@
             const modal = document.getElementById('activity-modal');
             const content = document.getElementById('modal-content');
             const tagColor = getTagColor(act.category);
+            const linkifiedDesc = linkify(act.desc);
 
             content.innerHTML = `
                 <div class="h-64 sm:h-80 overflow-hidden relative">
                     <img src="${act.img}" alt="${act.title}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x400?text=LU4MH'" />
-                    <!-- Unified Tag Morphology in Modal -->
                     <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${tagColor}">${act.category}</div>
                 </div>
                 <div class="p-8 sm:p-12">
@@ -442,7 +462,85 @@
                     </div>
                     <h2 class="text-3xl sm:text-4xl font-display font-bold mb-6 leading-tight tracking-tight text-slate-900 dark:text-white">${act.title}</h2>
                     <div class="prose prose-slate dark:prose-invert max-w-none">
-                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line font-light">${act.desc}</p>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line font-light">${linkifiedDesc}</p>
+                    </div>
+                </div>`;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendar-container');
+            if (calendarData.length === 0) { container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos.</p>'; return; }
+            container.innerHTML = calendarData.map((event, index) => {
+                const cleanDescForCard = (event.desc || '').replace(/\r?\n|\r/g, " ");
+                const shortDesc = cleanDescForCard.length > 250 ? cleanDescForCard.substring(0, 250) + '...' : cleanDescForCard;
+                return `
+                <div class="group bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-200 dark:border-slate-700/50 flex flex-col h-full overflow-hidden">
+                    <div class="p-8 pb-0 flex items-start justify-between">
+                        <div class="flex flex-col items-center justify-center w-20 h-20 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                            <span class="text-3xl font-display font-bold leading-none tracking-tighter text-slate-900 dark:text-slate-100">${event.day}</span>
+                            <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">${event.month}</span>
+                        </div>
+                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-display font-bold mb-3 group-hover:text-primary transition-colors leading-tight tracking-tight text-slate-900 dark:text-white">${event.title}</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">${shortDesc}</p>
+                        
+                        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700/50 mb-6">
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold uppercase tracking-tight">${event.time}</span></div>
+                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold uppercase tracking-tight">${event.location}</span></div>
+                        </div>
+
+                        <button onclick="openCalendarModal(${index})" class="bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-900 dark:text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all w-fit uppercase tracking-wider text-[10px]">
+                            Saber Más
+                        </button>
+                    </div>
+                </div>`}).join('');
+        }
+
+        function openCalendarModal(index) {
+            const event = calendarData[index];
+            const modal = document.getElementById('activity-modal');
+            const content = document.getElementById('modal-content');
+            const linkifiedDesc = linkify(event.desc);
+
+            content.innerHTML = `
+                <div class="p-8 sm:p-12">
+                    <div class="flex justify-between items-start mb-8">
+                        <div class="flex flex-col items-center justify-center w-24 h-24 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <span class="text-4xl font-display font-bold leading-none tracking-tighter text-slate-900 dark:text-slate-100">${event.day}</span>
+                            <span class="text-[14px] font-bold uppercase text-slate-500 dark:text-slate-400">${event.month}</span>
+                        </div>
+                        <span class="px-5 py-2 rounded-full text-[12px] font-black tracking-widest uppercase shadow-lg ${event.tagColor}">${event.tag}</span>
+                    </div>
+                    
+                    <h2 class="text-3xl sm:text-4xl font-display font-bold mb-8 leading-tight tracking-tight text-slate-900 dark:text-white">${event.title}</h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                        <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300">
+                            <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm text-primary">
+                                <span class="material-icons-round">schedule</span>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest font-black text-slate-400">Horario</p>
+                                <p class="font-bold">${event.time}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-slate-600 dark:text-slate-300">
+                            <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm text-primary">
+                                <span class="material-icons-round">location_on</span>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest font-black text-slate-400">Ubicación</p>
+                                <p class="font-bold">${event.location}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prose prose-slate dark:prose-invert max-w-none">
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg whitespace-pre-line font-light">${linkifiedDesc}</p>
                     </div>
                 </div>`;
             modal.classList.remove('hidden');
@@ -451,30 +549,6 @@
 
         function closeActivityModal() { document.getElementById('activity-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
         document.getElementById('activity-modal').addEventListener('click', (e) => { if (e.target.id === 'activity-modal') closeActivityModal(); });
-
-        function renderCalendar() {
-            const container = document.getElementById('calendar-container');
-            if (calendarData.length === 0) { container.innerHTML = '<p class="col-span-3 text-center text-slate-500 py-10 italic">No hay eventos próximos.</p>'; return; }
-            container.innerHTML = calendarData.map(event => `
-                <div class="group bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-200 dark:border-slate-700/50 flex flex-col h-full overflow-hidden">
-                    <div class="p-8 pb-0 flex items-start justify-between">
-                        <div class="flex flex-col items-center justify-center w-20 h-20 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                            <span class="text-3xl font-display font-bold leading-none tracking-tighter text-slate-900 dark:text-slate-100">${event.day}</span>
-                            <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">${event.month}</span>
-                        </div>
-                        <!-- Unified Tag Morphology -->
-                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase ${event.tagColor}">${event.tag}</span>
-                    </div>
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-display font-bold mb-3 group-hover:text-primary transition-colors leading-tight tracking-tight text-slate-900 dark:text-white">${event.title}</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 whitespace-pre-line font-light">${event.desc}</p>
-                        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">schedule</span><span class="text-xs font-bold uppercase tracking-tight">${event.time}</span></div>
-                            <div class="flex items-center gap-3 text-slate-400"><span class="material-icons-round text-sm text-primary">location_on</span><span class="text-xs font-bold uppercase tracking-tight">${event.location}</span></div>
-                        </div>
-                    </div>
-                </div>`).join('');
-        }
 
         function renderResources() {
             document.getElementById('manuals-list').innerHTML = resourcesData.manuals.map(item => `
@@ -537,4 +611,3 @@
     </script>
 </body>
 </html>
-
