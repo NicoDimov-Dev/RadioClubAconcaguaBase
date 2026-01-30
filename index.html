@@ -72,8 +72,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 md:h-20">
                 <a href="#" onclick="showPage('home')" class="flex items-center gap-3">
-                    <div class="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xs logo-glow overflow-hidden">
-                        <img src="https://api.dicebear.com/7.x/initials/svg?seed=LU4MH&backgroundColor=E31E24" alt="LU4MH" />
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center logo-glow overflow-hidden p-1">
+                        <!-- Direct link used for the logo -->
+                        <img src="https://iili.io/fL0tv5v.png" alt="LU4MH Logo" class="w-full h-full object-contain" />
                     </div>
                     <div class="flex flex-col">
                         <span class="font-display font-bold text-xl md:text-2xl leading-none text-primary">LU4MH</span>
@@ -178,18 +179,9 @@
                             <div class="relative w-full max-w-[500px] aspect-square">
                                 <!-- Multi-layered glow -->
                                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-[80px]"></div>
-                                <!-- Large Stylized Logo Placeholder (matches reference image) -->
-                                <div class="relative w-full h-full rounded-full border-[16px] border-primary flex items-center justify-center p-4 bg-white dark:bg-slate-900 shadow-2xl">
-                                    <div class="text-center">
-                                        <div class="w-full h-48 flex items-center justify-center mb-4">
-                                            <span class="material-icons-round text-[160px] text-primary">cell_tower</span>
-                                        </div>
-                                        <h2 class="text-3xl font-black font-display tracking-tighter text-slate-900 dark:text-white uppercase">Mendoza Argentina</h2>
-                                        <div class="h-1 w-24 bg-primary mx-auto my-4"></div>
-                                        <p class="text-xl font-bold text-slate-500">LAS HERAS</p>
-                                    </div>
-                                    <!-- Circular Label Ring simulated with CSS -->
-                                    <div class="absolute -inset-8 rounded-full border border-primary/20 pointer-events-none"></div>
+                                <!-- Updated Logo Image -->
+                                <div class="relative w-full h-full rounded-full flex items-center justify-center p-4 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden border-[1px] border-slate-200 dark:border-slate-800">
+                                    <img src="https://i.freeimage.host/fL0tv5v.png" alt="Radio Club Aconcagua Logo" class="w-full h-full object-contain scale-90" />
                                 </div>
                             </div>
                         </div>
@@ -206,7 +198,7 @@
             </header>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-3 gap-8" id="activities-container">
-                    <!-- Cards will be populated by JS or kept static -->
+                    <!-- Cards populated by JS -->
                 </div>
             </div>
         </section>
@@ -248,7 +240,10 @@
             <div class="grid md:grid-cols-4 gap-12">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary font-bold">LU4MH</div>
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden p-1">
+                            <!-- Updated Footer Logo -->
+                            <img src="https://i.freeimage.host/fL0tv5v.png" alt="Logo" class="w-full h-full object-contain" />
+                        </div>
                         <div>
                             <h4 class="text-2xl font-display font-bold leading-tight">Radio Club Aconcagua</h4>
                             <p class="text-slate-400 font-mono tracking-widest uppercase text-sm">Licencia LU4MH</p>
@@ -295,7 +290,7 @@
     </footer>
 
     <script>
-        // Data Objects (Converted from your React files)
+        // Data Objects
         const activitiesData = [
             {
                 title: "Expedición Cerro Aconcagua",
@@ -393,12 +388,9 @@
 
         // Logic Functions
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-            // Show selected page
             document.getElementById(`page-${pageId}`).classList.add('active');
             
-            // Update Nav Links
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.dataset.page === pageId) {
                     link.classList.add('text-primary');
@@ -409,7 +401,6 @@
                 }
             });
 
-            // Close mobile menu if open
             document.getElementById('mobile-menu').classList.add('hidden');
             document.getElementById('menu-icon').textContent = 'menu';
             
